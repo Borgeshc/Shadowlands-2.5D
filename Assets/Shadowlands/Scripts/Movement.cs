@@ -17,17 +17,25 @@ public class Movement : MonoBehaviour
     float horizontal;
 
     Rigidbody rb;
+    Animator anim;
+
     bool canDoubleJump;
     bool jumping;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
     {
         horizontal = Input.GetAxis("Horizontal");
+
+        if (horizontal == 0 && !anim.GetBool("IsIdle"))
+            anim.SetBool("IsIdle", true);
+        else if (horizontal != 0 && anim.GetBool("IsIdle"))
+            anim.SetBool("IsIdle", false);
 
         if (horizontal > 0)
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
@@ -37,18 +45,29 @@ public class Movement : MonoBehaviour
         rb.velocity = new Vector3(horizontal * speed * Time.deltaTime, rb.velocity.y, 0);
 
         if(Input.GetKeyDown(KeyCode.Space))
+            Jump();
+
+        if(!jumping && IsGrounded())
         {
-            if(IsGrounded())
-            {
-                jumping = true;
-                rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0);
-            }
-            else if(jumping)
-            {
-                rb.velocity = new Vector3(rb.velocity.x, 0, 0);
-                rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0);
-                jumping = false;
-            }
+            anim.SetBool("DoubleJump", false);
+            anim.SetBool("Jump", false);
+        }
+    }
+
+    void Jump()
+    {
+        if (IsGrounded())
+        {
+            anim.SetBool("Jump", true);
+            jumping = true;
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0);
+        }
+        else if (jumping)
+        {
+            anim.SetBool("DoubleJump", true);
+            rb.velocity = new Vector3(rb.velocity.x, 0, 0);
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce * 1.2f, 0);
+            jumping = false;
         }
     }
 
@@ -58,7 +77,9 @@ public class Movement : MonoBehaviour
         bool isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, distToGround, groundLayer);
 
         if (isGrounded)
+        {
             jumping = false;
+        }
 
         return isGrounded;
     }
