@@ -15997,11 +15997,13 @@ MonoBehaviour:
   speed: 350
   rotationSpeed: 10
   jumpForce: 5
-  distToGround: 1.1
+  distToGround: 1.05
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
   gravity: 0.1
+  rollSpeed: 15
+  dodgeCooldownTimer: 2
 --- !u!54 &1364859683
 Rigidbody:
   m_ObjectHideFlags: 0
