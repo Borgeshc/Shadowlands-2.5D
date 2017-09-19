@@ -581,6 +581,21 @@ Prefab:
       propertyPath: m_Radius
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequency
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMax
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a27aaa9514020fa44bb6081abd5f14fc, type: 2}
   m_IsPrefabParent: 0
@@ -4057,6 +4072,21 @@ Prefab:
         type: 2}
       propertyPath: m_Radius
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequency
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMax
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a27aaa9514020fa44bb6081abd5f14fc, type: 2}
@@ -14749,6 +14779,21 @@ Prefab:
       propertyPath: m_Radius
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequency
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMax
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a27aaa9514020fa44bb6081abd5f14fc, type: 2}
   m_IsPrefabParent: 0
@@ -15547,6 +15592,21 @@ Prefab:
         type: 2}
       propertyPath: m_Radius
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequency
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMax
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a27aaa9514020fa44bb6081abd5f14fc, type: 2}
@@ -24146,6 +24206,21 @@ Prefab:
         type: 2}
       propertyPath: m_Radius
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequency
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114663392290828162, guid: a27aaa9514020fa44bb6081abd5f14fc,
+        type: 2}
+      propertyPath: attackFrequencyMax
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a27aaa9514020fa44bb6081abd5f14fc, type: 2}

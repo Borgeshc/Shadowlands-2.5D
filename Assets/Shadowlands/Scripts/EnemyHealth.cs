@@ -9,6 +9,7 @@ public class EnemyHealth : MonoBehaviour
     [HideInInspector]
     public bool isDead;
 
+    bool takingDamage;
     float health;
     Animator anim;
     Rigidbody rb;
@@ -26,14 +27,18 @@ public class EnemyHealth : MonoBehaviour
     {
         if (isDead) return;
 
-        health -= damage;
-        TriggerHit();
+        if(!takingDamage)
+        {
+            takingDamage = true;
+            health -= damage;
+            StartCoroutine(TriggerHit());
+        }
 
         if (health <= 0)
             Died();
     }
 
-    void TriggerHit()
+    IEnumerator TriggerHit()
     {
         int randomHit = Random.Range(0, 2);
         switch(randomHit)
@@ -48,6 +53,9 @@ public class EnemyHealth : MonoBehaviour
                 anim.SetTrigger("Hit3");
                 break;
         }
+
+        yield return new WaitForSeconds(.5f);
+        takingDamage = false;
     }
 
     void Died()
