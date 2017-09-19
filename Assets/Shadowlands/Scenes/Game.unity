@@ -16328,7 +16328,7 @@ MonoBehaviour:
     m_Bits: 256
   gravity: 0.1
   rollSpeed: 15
-  dodgeCooldownTimer: 2
+  dodgeCooldownTimer: 0.5
   collision: {fileID: 1364859679}
 --- !u!54 &1364859683
 Rigidbody:

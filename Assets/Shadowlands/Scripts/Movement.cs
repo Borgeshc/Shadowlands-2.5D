@@ -96,7 +96,6 @@ public class Movement : MonoBehaviour
                 {
                     isRolling = true;
                     rollingRight = false;
-                    roll = true;
                     StartCoroutine(Rolling());
                 }
             }
@@ -178,6 +177,8 @@ public class Movement : MonoBehaviour
 
     IEnumerator Rolling()
     {
+        yield return new WaitForSeconds(.1f);
+        roll = true;
         yield return new WaitForSeconds(.5f);
         rb.useGravity = true;
         collision.enabled = true;
