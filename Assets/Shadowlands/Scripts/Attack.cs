@@ -6,6 +6,8 @@ public class Attack : MonoBehaviour
 {
     public float damage;
     public TrailRenderer weaponTrail;
+    public GameObject fireball;
+    public GameObject fireballSpawnPosition;
 
     public List<GameObject> enemiesInRange = new List<GameObject>();
     Animator anim;
@@ -37,7 +39,6 @@ public class Attack : MonoBehaviour
     IEnumerator WeaponAttack()
     {
         int randomAttack = Random.Range(0, 7);
-        print(randomAttack + 1);
 
         switch(randomAttack)
         {
@@ -73,8 +74,8 @@ public class Attack : MonoBehaviour
 
     IEnumerator SpellAttack()
     {
+        Movement.canMove = false;
         int randomSpell = Random.Range(0, 2);
-        print(randomSpell + 1);
 
         switch (randomSpell)
         {
@@ -89,8 +90,16 @@ public class Attack : MonoBehaviour
                 break;
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.5f);
+        Movement.canMove = true;
+        yield return new WaitForSeconds(.5f);
         casting = false;
+    }
+
+    public void CastFireball()
+    {
+        GameObject fireballInstance = Instantiate(fireball, fireballSpawnPosition.transform.position, transform.rotation, transform) as GameObject;
+        fireballInstance.transform.parent = null;
     }
 
     public void OnTriggerEnter(Collider other)

@@ -19,6 +19,8 @@ public class Movement : MonoBehaviour
     public float dodgeCooldownTimer;
     public Collider collision;
 
+    public static bool canMove;
+
     float horizontal;
 
     Rigidbody rb;
@@ -41,14 +43,13 @@ public class Movement : MonoBehaviour
 
     private void Start()
     {
+        canMove = true;
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        print(IsGrounded());
-
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
 
@@ -109,6 +110,7 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!canMove) return;
         horizontal = Input.GetAxis("Horizontal");
 
         if (horizontal == 0 && !anim.GetBool("IsIdle"))

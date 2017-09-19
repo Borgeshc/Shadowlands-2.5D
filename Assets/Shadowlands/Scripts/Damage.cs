@@ -18,7 +18,6 @@ public class Damage : MonoBehaviour
     {
         if(other.tag.Equals("Enemy"))
         {
-            print("Attacked " + other.name);
             other.GetComponent<EnemyHealth>().TookDamage(damage);
         }
     }
