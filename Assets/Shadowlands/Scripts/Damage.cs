@@ -5,6 +5,7 @@ using UnityEngine;
 public class Damage : MonoBehaviour
 {
     public float damage;
+    public TrailRenderer trail;
 
     BoxCollider collision;
 
@@ -30,5 +31,15 @@ public class Damage : MonoBehaviour
     public void DisableCollider()
     {
         collision.enabled = false;
+    }
+    
+    public void StartTrail()
+    {
+        trail.enabled = true;
+    }
+
+    public void StopTrail()
+    {
+        trail.enabled = false;
     }
 }

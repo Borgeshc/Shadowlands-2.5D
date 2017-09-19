@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour
     [Space, Header("Dodge Variables")]
     public float rollSpeed;
     public float dodgeCooldownTimer;
+    public Collider collision;
 
     float horizontal;
 
@@ -60,7 +61,8 @@ public class Movement : MonoBehaviour
                 else
                     anim.SetTrigger("AirDodge");
 
-                print("Roll Right");
+                rb.useGravity = false;
+                collision.enabled = false;
 
                 if (!isRolling)
                 {
@@ -86,7 +88,8 @@ public class Movement : MonoBehaviour
                 else
                     anim.SetTrigger("AirDodge");
 
-                print("Roll Left");
+                rb.useGravity = false;
+                collision.enabled = false;
 
                 if (!isRolling)
                 {
@@ -174,6 +177,8 @@ public class Movement : MonoBehaviour
     IEnumerator Rolling()
     {
         yield return new WaitForSeconds(.5f);
+        rb.useGravity = true;
+        collision.enabled = true;
         isRolling = false;
         roll = false;
 
