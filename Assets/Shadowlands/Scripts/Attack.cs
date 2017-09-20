@@ -9,35 +9,80 @@ public class Attack : MonoBehaviour
     public GameObject fireball;
     public GameObject fireballSpawnPosition;
 
+    RFX4_CameraShake cameraShake;
+
     public List<GameObject> enemiesInRange = new List<GameObject>();
     Animator anim;
     Damage damageScript;
     bool attacking;
     bool casting;
+    bool slamming;
+
+    Vector3 gravity;
+    Rigidbody rb;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
         damageScript = GetComponentInChildren<Damage>();
+        cameraShake = GetComponent<RFX4_CameraShake>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        if(Input.GetMouseButton(0) && !attacking)
+        if(Input.GetMouseButton(0))
         {
-            attacking = true;
-            StartCoroutine(WeaponAttack());
+            if(Movement.isJumping && !slamming)
+            {
+                print("Slam");
+                slamming = true;
+                StartCoroutine(Slam());
+            }
+
+            if(!attacking && !Movement.isJumping && !slamming)
+            {
+                attacking = true;
+                StartCoroutine(WeaponAttack());
+            }
         }
 
-        if (Input.GetMouseButtonDown(1) && !casting)
+        if (Input.GetMouseButton(1) && !casting && !slamming)
         {
             casting = true;
             StartCoroutine(SpellAttack());
         }
     }
 
+    IEnumerator Slam()
+    {
+        Movement.canRotate = false;
+        Time.timeScale = .5f;
+        gravity = Physics.gravity;
+        Physics.gravity = new Vector3(0, Physics.gravity.y * 15, 0);
+        Movement.canMove = false;
+        anim.SetTrigger("Slam");
+        yield return new WaitForSecondsRealtime(.5f);
+        Time.timeScale = 1f;
+        yield return new WaitForSeconds(.5f);
+        slamming = false;
+        Movement.canMove = true;
+        Movement.canRotate = true;
+        Physics.gravity = gravity;
+    }
+
+    IEnumerator CameraShake()
+    {
+        cameraShake.enabled = true;
+        yield return new WaitForSeconds(1.5f);
+        cameraShake.enabled = false;
+    }
+
     IEnumerator WeaponAttack()
     {
+        rb.velocity = Vector3.zero;
+        Movement.canRotate = false;
+        Movement.canMove = false;
         int randomAttack = Random.Range(0, 7);
 
         switch(randomAttack)
@@ -69,11 +114,15 @@ public class Attack : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
+        Movement.canRotate = true;
+        Movement.canMove = true;
         attacking = false;
     }
 
     IEnumerator SpellAttack()
     {
+        rb.velocity = Vector3.zero;
+        Movement.canRotate = false;
         Movement.canMove = false;
         int randomSpell = Random.Range(0, 2);
 
@@ -93,6 +142,7 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         Movement.canMove = true;
         yield return new WaitForSeconds(.5f);
+        Movement.canRotate = true;
         casting = false;
     }
 

@@ -20,6 +20,8 @@ public class Movement : MonoBehaviour
     public Collider collision;
 
     public static bool canMove;
+    public static bool canRotate;
+    public static bool isJumping;
 
     float horizontal;
 
@@ -37,13 +39,14 @@ public class Movement : MonoBehaviour
     bool isRolling;
     bool rollingRight;
     bool dodgeCooldown;
-
+    bool isGrounded;
     bool canDoubleJump;
     bool jumping;
 
     private void Start()
     {
         canMove = true;
+        canRotate = true;
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
     }
@@ -53,11 +56,22 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
 
+        isGrounded = IsGrounded();
+
+        if (isGrounded)
+        {
+            jumping = false;
+            isJumping = false;
+            canDoubleJump = true;
+        }
+        else
+            isJumping = true;
+
         if (Input.GetKeyDown(KeyCode.D) && !dodgeCooldown)
         {
             if (D_ButtonTimer > 0 && D_ButtonCount == 1)
             {
-                if (IsGrounded())
+                if (isGrounded)
                     anim.SetTrigger("Roll");
                 else
                     anim.SetTrigger("AirDodge");
@@ -84,7 +98,7 @@ public class Movement : MonoBehaviour
         {
             if (A_ButtonTimer > 0 && A_ButtonCount == 1)
             {
-                if (IsGrounded())
+                if (isGrounded)
                     anim.SetTrigger("Roll");
                 else
                     anim.SetTrigger("AirDodge");
@@ -109,7 +123,6 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!canMove) return;
         horizontal = Input.GetAxis("Horizontal");
 
         if (horizontal == 0 && !anim.GetBool("IsIdle"))
@@ -117,10 +130,29 @@ public class Movement : MonoBehaviour
         else if (horizontal != 0 && anim.GetBool("IsIdle"))
             anim.SetBool("IsIdle", false);
 
-        if (horizontal > 0)
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
-        else if(horizontal < 0)
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0,-180,0), rotationSpeed * Time.deltaTime);
+        if (!canRotate)
+        {
+            if (transform.rotation.y > -90 && transform.rotation.y < 0)
+                transform.rotation = Quaternion.identity;
+            else if (transform.rotation.y < -90 && transform.rotation.y > -180)
+                transform.rotation = Quaternion.Euler(0, -180, 0);
+            return;
+        }
+        else
+        {
+            if (horizontal > 0)
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
+            else if (horizontal < 0)
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, -180, 0), rotationSpeed * Time.deltaTime);
+        }
+
+        if (isGrounded)
+        {
+            anim.SetBool("DoubleJump", false);
+            anim.SetBool("Jump", false);
+        }
+
+        if (!canMove) return;
 
         rb.velocity = new Vector3(horizontal * speed * Time.deltaTime, rb.velocity.y, 0);
 
@@ -150,27 +182,23 @@ public class Movement : MonoBehaviour
         {
             A_ButtonCount = 0;
         }
-
-        if (!jumping && IsGrounded())
-        {
-            anim.SetBool("DoubleJump", false);
-            anim.SetBool("Jump", false);
-        }
     }
 
     void Jump()
     {
-        if (IsGrounded())
+        if (isGrounded)
         {
             anim.SetBool("Jump", true);
             jumping = true;
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0);
+            canDoubleJump = true;
         }
-        else if (jumping)
+        else if (!isGrounded && canDoubleJump)
         {
+            canDoubleJump = false;
             anim.SetBool("DoubleJump", true);
             rb.velocity = new Vector3(rb.velocity.x, 0, 0);
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce * 1.2f, 0);
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce * 1.5f, 0);
             jumping = false;
         }
     }
@@ -202,11 +230,6 @@ public class Movement : MonoBehaviour
     {
         RaycastHit hit;
         bool isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, distToGround, groundLayer);
-
-        if (isGrounded)
-        {
-            jumping = false;
-        }
 
         return isGrounded;
     }

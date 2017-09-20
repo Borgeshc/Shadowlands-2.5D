@@ -15,6 +15,7 @@ public class EnemyHealth : MonoBehaviour
     Animator anim;
     Rigidbody rb;
     CapsuleCollider collision;
+    BoxCollider boxCollision;
 
     private void Start()
     {
@@ -22,6 +23,7 @@ public class EnemyHealth : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         collision = GetComponent<CapsuleCollider>();
+        boxCollision = GetComponent<BoxCollider>();
     }
 
     public void TookDamage(float damage)
@@ -66,6 +68,7 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
         rb.useGravity = false;
         collision.enabled = false;
+        boxCollision.enabled = false;
         TriggerDeath();
     }
 
