@@ -18,6 +18,7 @@ public class Movement : MonoBehaviour
     public float rollSpeed;
     public float dodgeCooldownTimer;
     public Collider collision;
+    public TrailRenderer[] bodyDistortTrail;
 
     public static bool canMove;
     public static bool canRotate;
@@ -58,7 +59,13 @@ public class Movement : MonoBehaviour
 
         isGrounded = IsGrounded();
 
-        if (isGrounded)
+        if(isJumping == true && isGrounded)
+        {
+            anim.SetBool("DoubleJump", false);
+            anim.SetBool("Jump", false);
+        }
+
+        if (IsGrounded())
         {
             jumping = false;
             isJumping = false;
@@ -146,12 +153,6 @@ public class Movement : MonoBehaviour
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, -180, 0), rotationSpeed * Time.deltaTime);
         }
 
-        if (isGrounded)
-        {
-            anim.SetBool("DoubleJump", false);
-            anim.SetBool("Jump", false);
-        }
-
         if (!canMove) return;
 
         rb.velocity = new Vector3(horizontal * speed * Time.deltaTime, rb.velocity.y, 0);
@@ -186,9 +187,10 @@ public class Movement : MonoBehaviour
 
     void Jump()
     {
+        anim.SetBool("Jump", true);
+
         if (isGrounded)
         {
-            anim.SetBool("Jump", true);
             jumping = true;
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0);
             canDoubleJump = true;
@@ -205,6 +207,9 @@ public class Movement : MonoBehaviour
 
     IEnumerator Rolling()
     {
+        for(int i = 0; i < bodyDistortTrail.Length; i++)
+            bodyDistortTrail[i].enabled = true;
+
         yield return new WaitForSeconds(.1f);
         roll = true;
         yield return new WaitForSeconds(.5f);
@@ -213,7 +218,10 @@ public class Movement : MonoBehaviour
         isRolling = false;
         roll = false;
 
-        if(!dodgeCooldown)
+        for (int i = 0; i < bodyDistortTrail.Length; i++)
+            bodyDistortTrail[i].enabled = false;
+
+        if (!dodgeCooldown)
         {
             dodgeCooldown = true;
             StartCoroutine(DodgeCooldown());

@@ -6,9 +6,10 @@ public class Attack : MonoBehaviour
 {
     public float damage;
     public TrailRenderer weaponTrail;
+    public TrailRenderer distortTrail;
     public GameObject fireball;
     public GameObject fireballSpawnPosition;
-
+    public GameObject hitEffect;
     RFX4_CameraShake cameraShake;
 
     public List<GameObject> enemiesInRange = new List<GameObject>();
@@ -62,13 +63,12 @@ public class Attack : MonoBehaviour
         Physics.gravity = new Vector3(0, Physics.gravity.y * 15, 0);
         Movement.canMove = false;
         anim.SetTrigger("Slam");
-        yield return new WaitForSecondsRealtime(.5f);
-        Time.timeScale = 1f;
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSecondsRealtime(1.5f);
         slamming = false;
         Movement.canMove = true;
         Movement.canRotate = true;
         Physics.gravity = gravity;
+        Time.timeScale = 1f;
     }
 
     IEnumerator CameraShake()
@@ -192,10 +192,19 @@ public class Attack : MonoBehaviour
     public void StartTrail()
     {
         weaponTrail.enabled = true;
+        distortTrail.enabled = true;
     }
 
     public void StopTrail()
     {
         weaponTrail.enabled = false;
+        distortTrail.enabled = false;
+    }
+
+    public IEnumerator SlamHitEffect()
+    {
+        hitEffect.SetActive(true);
+        yield return new WaitForSeconds(.3f);
+        hitEffect.SetActive(false);
     }
 }

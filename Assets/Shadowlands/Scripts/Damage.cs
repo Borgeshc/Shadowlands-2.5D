@@ -6,6 +6,7 @@ public class Damage : MonoBehaviour
 {
     public float damage;
     public TrailRenderer trail;
+    public TrailRenderer distortTrail;
 
     BoxCollider collision;
 
@@ -35,10 +36,12 @@ public class Damage : MonoBehaviour
     public void StartTrail()
     {
         trail.enabled = true;
+        distortTrail.enabled = true;
     }
 
     public void StopTrail()
     {
         trail.enabled = false;
+        distortTrail.enabled = false;
     }
 }
