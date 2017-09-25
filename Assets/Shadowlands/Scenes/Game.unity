@@ -27621,7 +27621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
-  offset: {x: 0, y: 10, z: -3.5}
+  offset: {x: 0, y: 12, z: -3.5}
 --- !u!114 &859476032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36965,7 +36965,6 @@ MonoBehaviour:
   gravity: 0.1
   rollSpeed: 15
   dodgeCooldownTimer: 0.5
-  collision: {fileID: 1364859679}
   bodyDistortTrail:
   - {fileID: 1576684584}
   - {fileID: 1878879145}

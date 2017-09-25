@@ -17,7 +17,6 @@ public class Movement : MonoBehaviour
     [Space, Header("Dodge Variables")]
     public float rollSpeed;
     public float dodgeCooldownTimer;
-    public Collider collision;
     public TrailRenderer[] bodyDistortTrail;
 
     public static bool canMove;
@@ -48,7 +47,9 @@ public class Movement : MonoBehaviour
     bool waitForRoll;
     bool isRolling;
     bool rollingRight;
+    bool rollingForward;
     bool rollingLeft;
+    bool rollingBack;
     bool dodgeCooldown;
     bool isGrounded;
     bool canDoubleJump;
@@ -94,7 +95,6 @@ public class Movement : MonoBehaviour
                     anim.SetTrigger("AirDodge");
 
                 rb.useGravity = false;
-                collision.enabled = false;
 
                 if (!isRolling)
                 {
@@ -121,12 +121,11 @@ public class Movement : MonoBehaviour
                     anim.SetTrigger("AirDodge");
 
                 rb.useGravity = false;
-                collision.enabled = false;
 
                 if (!isRolling)
                 {
                     isRolling = true;
-                    rollingRight = false;
+                    rollingLeft = true;
                     StartCoroutine(Rolling());
                 }
             }
@@ -134,6 +133,57 @@ public class Movement : MonoBehaviour
             {
                 A_ButtonTimer = .5f;
                 A_ButtonCount += 1;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && !dodgeCooldown)
+        {
+            if (W_ButtonTimer > 0 && W_ButtonCount == 1)
+            {
+                if (isGrounded)
+                    anim.SetTrigger("Roll");
+                else
+                    anim.SetTrigger("AirDodge");
+
+                rb.useGravity = false;
+
+                if (!isRolling)
+                {
+                    isRolling = true;
+                    rollingForward = true;
+                    StartCoroutine(Rolling());
+                }
+            }
+            else
+            {
+                W_ButtonTimer = .5f;
+                W_ButtonCount += 1;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) && !dodgeCooldown)
+        {
+            if (S_ButtonTimer > 0 && S_ButtonCount == 1)
+            {
+                if (isGrounded)
+                    anim.SetTrigger("Roll");
+                else
+                    anim.SetTrigger("AirDodge");
+
+                rb.useGravity = false;
+
+                if (!isRolling)
+                {
+                    isRolling = true;
+                    rollingBack = true;
+                    roll = true;
+                    StartCoroutine(Rolling());
+                }
+            }
+            else
+            {
+                S_ButtonTimer = .5f;
+                S_ButtonCount += 1;
             }
         }
     }
@@ -165,7 +215,7 @@ public class Movement : MonoBehaviour
 
         if (!canMove) return;
 
-        rb.velocity = new Vector3(horizontal * speed * Time.deltaTime, rb.velocity.y, vertical * speed * Time.deltaTime);
+        rb.velocity = new Vector3(movement.normalized.x * speed * Time.deltaTime, rb.velocity.y, movement.normalized.z * speed * Time.deltaTime);
 
         if (roll && rollingRight)
         {
@@ -173,20 +223,19 @@ public class Movement : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.velocity = (Vector3.right * rollSpeed);
         }
-        else if (roll && !rollingRight)
+        else if (roll && rollingLeft)
         {
             transform.rotation = Quaternion.Euler(0, -180, 0);
             rb.velocity = Vector3.zero;
             rb.velocity = (Vector3.left * rollSpeed);
         }
-
-        if (roll && rollingLeft)
+        else if (roll && rollingForward)
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
             rb.velocity = Vector3.zero;
             rb.velocity = (Vector3.forward * rollSpeed);
         }
-        else if (roll && !rollingLeft)
+        else if (roll && rollingBack)
         {
             transform.rotation = Quaternion.Euler(0, -270, 0);
             rb.velocity = Vector3.zero;
@@ -252,9 +301,13 @@ public class Movement : MonoBehaviour
         roll = true;
         yield return new WaitForSeconds(.5f);
         rb.useGravity = true;
-        collision.enabled = true;
         isRolling = false;
         roll = false;
+
+        rollingBack = false;
+        rollingForward = false;
+        rollingLeft = false;
+        rollingRight = false;
 
         for (int i = 0; i < bodyDistortTrail.Length; i++)
             bodyDistortTrail[i].enabled = false;
