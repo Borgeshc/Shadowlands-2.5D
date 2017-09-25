@@ -25,9 +25,12 @@ public class Movement : MonoBehaviour
     public static bool isJumping;
 
     float horizontal;
+    float vertical;
 
     Rigidbody rb;
     Animator anim;
+    Vector3 targetRotation;
+    Vector3 movement;
 
     float D_ButtonTimer = 1f;
     float D_ButtonCount;
@@ -35,10 +38,17 @@ public class Movement : MonoBehaviour
     float A_ButtonTimer = 1f;
     float A_ButtonCount;
 
+    float W_ButtonTimer = 1f;
+    float W_ButtonCount;
+
+    float S_ButtonTimer = 1f;
+    float S_ButtonCount;
+
     bool roll;
     bool waitForRoll;
     bool isRolling;
     bool rollingRight;
+    bool rollingLeft;
     bool dodgeCooldown;
     bool isGrounded;
     bool canDoubleJump;
@@ -131,31 +141,31 @@ public class Movement : MonoBehaviour
     private void FixedUpdate()
     {
         horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
 
-        if (horizontal == 0 && !anim.GetBool("IsIdle"))
-            anim.SetBool("IsIdle", true);
-        else if (horizontal != 0 && anim.GetBool("IsIdle"))
-            anim.SetBool("IsIdle", false);
+        movement = new Vector3(horizontal, 0, vertical);
 
-        if (!canRotate)
+        if (movement.sqrMagnitude > 1f)
         {
-            if (transform.rotation.y > -90 && transform.rotation.y < 0)
-                transform.rotation = Quaternion.identity;
-            else if (transform.rotation.y < -90 && transform.rotation.y > -180)
-                transform.rotation = Quaternion.Euler(0, -180, 0);
-            return;
+            movement.Normalize();
+        }
+
+        if (movement != Vector3.zero)
+        {
+            targetRotation = Quaternion.LookRotation(movement).eulerAngles;
+            anim.SetBool("IsIdle", false);
         }
         else
         {
-            if (horizontal > 0)
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
-            else if (horizontal < 0)
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, -180, 0), rotationSpeed * Time.deltaTime);
+            anim.SetBool("IsIdle", true);
         }
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(targetRotation.x,
+                     Mathf.Round(targetRotation.y / 45) * 45, targetRotation.z), Time.deltaTime * rotationSpeed);
 
         if (!canMove) return;
 
-        rb.velocity = new Vector3(horizontal * speed * Time.deltaTime, rb.velocity.y, 0);
+        rb.velocity = new Vector3(horizontal * speed * Time.deltaTime, rb.velocity.y, vertical * speed * Time.deltaTime);
 
         if (roll && rollingRight)
         {
@@ -170,6 +180,20 @@ public class Movement : MonoBehaviour
             rb.velocity = (Vector3.left * rollSpeed);
         }
 
+        if (roll && rollingLeft)
+        {
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+            rb.velocity = Vector3.zero;
+            rb.velocity = (Vector3.forward * rollSpeed);
+        }
+        else if (roll && !rollingLeft)
+        {
+            transform.rotation = Quaternion.Euler(0, -270, 0);
+            rb.velocity = Vector3.zero;
+            rb.velocity = (Vector3.back * rollSpeed);
+        }
+
+
         if (D_ButtonTimer > 0)
             D_ButtonTimer -= 1 * Time.deltaTime;
         else
@@ -182,6 +206,20 @@ public class Movement : MonoBehaviour
         else
         {
             A_ButtonCount = 0;
+        }
+
+        if (W_ButtonTimer > 0)
+            W_ButtonTimer -= 1 * Time.deltaTime;
+        else
+        {
+            W_ButtonCount = 0;
+        }
+
+        if (S_ButtonTimer > 0)
+            S_ButtonTimer -= 1 * Time.deltaTime;
+        else
+        {
+            S_ButtonCount = 0;
         }
     }
 
