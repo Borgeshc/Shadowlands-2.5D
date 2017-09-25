@@ -148,7 +148,7 @@ public class Attack : MonoBehaviour
 
     public void CastFireball()
     {
-        GameObject fireballInstance = Instantiate(fireball, fireballSpawnPosition.transform.position, transform.rotation, transform) as GameObject;
+        GameObject fireballInstance = Instantiate(fireball, fireballSpawnPosition.transform.position, transform.rotation * Quaternion.Euler(0, -90, 0), transform) as GameObject;
         fireballInstance.transform.parent = null;
     }
 
