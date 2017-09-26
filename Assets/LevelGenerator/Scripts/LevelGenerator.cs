@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     public GameObject[] tiles;
-    public GameObject wall;
+    public GameObject[] walls;
 
     public List<Vector3> createdTiles;
 
@@ -130,7 +130,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 if (!createdTiles.Contains(new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize))))
                 {
-                    Instantiate(wall, new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize)), transform.rotation);
+                    Instantiate(walls[Random.Range(0, walls.Length)], new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize)), transform.rotation);
                     yield return new WaitForSeconds(waitTime);
                 }
             }
