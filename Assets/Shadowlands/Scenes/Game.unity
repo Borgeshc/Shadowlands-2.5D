@@ -53104,7 +53104,7 @@ Prefab:
     - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
         type: 2}
       propertyPath: tiles.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4204718092482982, guid: 6d719f66d0ece5c41af039ff4e8e1c1f, type: 2}
       propertyPath: m_LocalPosition.x
@@ -53142,7 +53142,7 @@ Prefab:
         type: 2}
       propertyPath: tiles.Array.data[0]
       value: 
-      objectReference: {fileID: 1385470070385730, guid: 83ca1bfa90f85d74982f080e02d8fd80,
+      objectReference: {fileID: 1543209365377750, guid: 8755b22c8fc800d448e4fc0238ba9111,
         type: 2}
     - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
         type: 2}
@@ -53152,7 +53152,7 @@ Prefab:
     - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
         type: 2}
       propertyPath: tileAmount
-      value: 200
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
         type: 2}
@@ -53168,7 +53168,7 @@ Prefab:
         type: 2}
       propertyPath: wall
       value: 
-      objectReference: {fileID: 1156131895337668, guid: d58886135a7b5de448a543023d502311,
+      objectReference: {fileID: 1363669375308796, guid: fbb76a4a1da58cb4388b89d4f4454dcb,
         type: 2}
     - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
         type: 2}
@@ -53182,6 +53182,31 @@ Prefab:
       value: 
       objectReference: {fileID: 1245816177917502, guid: ef6daa18cccbca448b2b93ae12a2c342,
         type: 2}
+    - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
+        type: 2}
+      propertyPath: waitTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
+        type: 2}
+      propertyPath: minX
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
+        type: 2}
+      propertyPath: minZ
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
+        type: 2}
+      propertyPath: maxX
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
+        type: 2}
+      propertyPath: maxZ
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6d719f66d0ece5c41af039ff4e8e1c1f, type: 2}
   m_IsPrefabParent: 0
