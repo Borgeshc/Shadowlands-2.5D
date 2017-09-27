@@ -7,7 +7,8 @@ public class LevelGenerator : MonoBehaviour
     public GameObject[] tiles;
     public GameObject[] walls;
 
-    public List<Vector3> createdTiles;
+    public List<Vector3> createdTileLocations;
+    public List<GameObject> createdTiles;
 
     public int tileAmount;
     public float tileSize;
@@ -26,6 +27,10 @@ public class LevelGenerator : MonoBehaviour
     public float zAmount;
     public float extraWallX;
     public float extraWallZ;
+
+    public delegate void GenerationEvents(List<GameObject> objects);
+    public static event GenerationEvents OnFloorCompleted;
+    public static event GenerationEvents OnWallsCompleted;
 
     IEnumerator Start()
     {
@@ -78,10 +83,11 @@ public class LevelGenerator : MonoBehaviour
 
     void CreateTile(int randomTile)
     {
-        if (!createdTiles.Contains(transform.position))
+        if (!createdTileLocations.Contains(transform.position))
         {
             GameObject tile = Instantiate(tiles[randomTile], transform.position, transform.rotation) as GameObject;
-            createdTiles.Add(tile.transform.position);
+            createdTileLocations.Add(tile.transform.position);
+            createdTiles.Add(tile);
         }
         else
             tileAmount++;
@@ -89,32 +95,33 @@ public class LevelGenerator : MonoBehaviour
 
     void Finish()
     {
+        OnFloorCompleted(createdTiles);
         CreateWallValues();
         StartCoroutine(CreateWalls());
     }
 
     void CreateWallValues()
     {
-        for (int i = 0; i < createdTiles.Count; i++)
+        for (int i = 0; i < createdTileLocations.Count; i++)
         {
-            if (createdTiles[i].x < minX)
+            if (createdTileLocations[i].x < minX)
             {
-                minX = createdTiles[i].x;
+                minX = createdTileLocations[i].x;
             }
 
-            if (createdTiles[i].x > maxX)
+            if (createdTileLocations[i].x > maxX)
             {
-                maxX = createdTiles[i].x;
+                maxX = createdTileLocations[i].x;
             }
 
-            if (createdTiles[i].z < minZ)
+            if (createdTileLocations[i].z < minZ)
             {
-                minZ = createdTiles[i].z;
+                minZ = createdTileLocations[i].z;
             }
 
-            if (createdTiles[i].z > maxZ)
+            if (createdTileLocations[i].z > maxZ)
             {
-                maxZ = createdTiles[i].z;
+                maxZ = createdTileLocations[i].z;
             }
 
             xAmount = ((maxX - minX) / tileSize) + extraWallX;
@@ -128,12 +135,14 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int z = 0; z < zAmount; z++)
             {
-                if (!createdTiles.Contains(new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize))))
+                if (!createdTileLocations.Contains(new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize))))
                 {
                     Instantiate(walls[Random.Range(0, walls.Length)], new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize)), transform.rotation);
                     yield return new WaitForSeconds(waitTime);
                 }
             }
         }
+
+        OnWallsCompleted(new List<GameObject>());
     }
 }

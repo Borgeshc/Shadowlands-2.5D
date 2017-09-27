@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 33756220386918838}
   - component: {fileID: 23484413928448698}
   - component: {fileID: 65159766067968762}
+  - component: {fileID: 114660915904904760}
   m_Layer: 8
   m_Name: Brick_platform1
   m_TagString: Untagged
@@ -122,3 +123,31 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.963596, y: 0.24861307, z: 9.017037}
   m_Center: {x: -0.00000023841858, y: 0.012053408, z: 0}
+--- !u!114 &114660915904904760
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1963006198521554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaa66c2c9abac5e4f8fefab894d10f33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 0}

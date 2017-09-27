@@ -107,7 +107,7 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
-  m_NavMeshData: {fileID: 23800000, guid: 84c30cb3a13e14647bf522619f263bb8, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!1 &4164209
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,6 +168,24 @@ Transform:
   m_Father: {fileID: 507689768}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4698698 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1108317439738882, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1800178487}
+--- !u!114 &4698699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 4698698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e3140aea8a281845912d5362bd44df2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaces: []
+  objectsToRotate: []
 --- !u!1 &18269257
 GameObject:
   m_ObjectHideFlags: 0
@@ -26611,7 +26629,7 @@ Prefab:
     - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
         type: 2}
       propertyPath: tileAmount
-      value: 200
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114083717725920208, guid: 6d719f66d0ece5c41af039ff4e8e1c1f,
         type: 2}

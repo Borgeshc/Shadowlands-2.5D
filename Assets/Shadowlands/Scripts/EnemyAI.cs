@@ -32,7 +32,7 @@ public class EnemyAI : MonoBehaviour
 
         if(target != null)
         {
-            agent.SetDestination(new Vector3(target.transform.position.x, 0, 0));
+            agent.SetDestination(new Vector3(target.transform.position.x, 0, target.transform.position.z));
 
             if (Vector3.Distance(transform.position, target.transform.position) > agent.stoppingDistance)
                 FollowTarget();
