@@ -4,71 +4,76 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
+    [Header("Attack Variables")]
+    public float attackDistance;
+    public float chargeSpeed;
     public float damage;
+
+    [Space, Header("Effects")]
     public TrailRenderer weaponTrail;
     public TrailRenderer distortTrail;
+    public GameObject hitEffect;
+
+    [Space, Header("Spells")]
     public GameObject fireball;
     public GameObject fireballSpawnPosition;
-    public GameObject hitEffect;
-    RFX4_CameraShake cameraShake;
 
     public List<GameObject> enemiesInRange = new List<GameObject>();
-    Animator anim;
-    Damage damageScript;
+
     bool attacking;
     bool casting;
     bool slamming;
+    bool charging;
 
+    RFX4_CameraShake cameraShake;
+    Movement movement;
+    Animator anim;
+    Damage damageScript;
     Vector3 gravity;
-    Rigidbody rb;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
         damageScript = GetComponentInChildren<Damage>();
         cameraShake = GetComponent<RFX4_CameraShake>();
-        rb = GetComponent<Rigidbody>();
+        movement = GetComponent<Movement>();
     }
 
     private void Update()
     {
         if(Input.GetMouseButton(0))
         {
-            if(Movement.isJumping && !slamming)
+            if (TargetObject.target && Vector3.Distance(transform.position, TargetObject.target.transform.position + (Vector3.one * 2)) < attackDistance)
             {
-                print("Slam");
-                slamming = true;
-                StartCoroutine(Slam());
+                if (!charging)
+                {
+                    charging = true;
+                    movement.chargeSpeed = chargeSpeed;
+                    StartCoroutine(ResetSpeed());
+                }
             }
 
-            if(!attacking && !Movement.isJumping && !slamming)
+            if (!attacking)
             {
                 attacking = true;
                 StartCoroutine(WeaponAttack());
             }
+             
         }
 
-        if (Input.GetMouseButton(1) && !casting && !slamming)
+        if (Input.GetMouseButton(1) && !casting)
         {
             casting = true;
             StartCoroutine(SpellAttack());
         }
     }
 
-    IEnumerator Slam()
+
+    IEnumerator ResetSpeed()
     {
-        Movement.canRotate = false;
-        Time.timeScale = .5f;
-        gravity = Physics.gravity;
-        Physics.gravity = new Vector3(0, Physics.gravity.y * 15, 0);
-        Movement.canMove = false;
-        anim.SetTrigger("Slam");
-        yield return new WaitForSecondsRealtime(1.5f);
-        slamming = false;
-        Movement.canMove = true;
-        Movement.canRotate = true;
-        Physics.gravity = gravity;
-        Time.timeScale = 1f;
+        yield return new WaitForSeconds(.05f);
+        movement.chargeSpeed = 0;
+        charging = false;
     }
 
     IEnumerator CameraShake()
@@ -80,9 +85,8 @@ public class Attack : MonoBehaviour
 
     IEnumerator WeaponAttack()
     {
-        rb.velocity = Vector3.zero;
-        Movement.canRotate = false;
-        Movement.canMove = false;
+       // Movement.canRotate = false;
+       // Movement.canMove = false;
         int randomAttack = Random.Range(0, 7);
 
         switch(randomAttack)
@@ -114,16 +118,15 @@ public class Attack : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-        Movement.canRotate = true;
-        Movement.canMove = true;
+        //Movement.canRotate = true;
+       // Movement.canMove = true;
         attacking = false;
     }
 
     IEnumerator SpellAttack()
     {
-        rb.velocity = Vector3.zero;
-        Movement.canRotate = false;
-        Movement.canMove = false;
+       // Movement.canRotate = false;
+       // Movement.canMove = false;
         int randomSpell = Random.Range(0, 2);
 
         switch (randomSpell)
@@ -140,9 +143,9 @@ public class Attack : MonoBehaviour
         }
 
         yield return new WaitForSeconds(.5f);
-        Movement.canMove = true;
+      //  Movement.canMove = true;
         yield return new WaitForSeconds(.5f);
-        Movement.canRotate = true;
+        //Movement.canRotate = true;
         casting = false;
     }
 
