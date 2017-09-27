@@ -9,6 +9,7 @@ public class LevelGenerator : MonoBehaviour
 
     public List<Vector3> createdTileLocations;
     public List<GameObject> createdTiles;
+    public List<Vector3> wallLocations;
 
     public int tileAmount;
     public float tileSize;
@@ -131,16 +132,55 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator CreateWalls()
     {
-        for (int x = 0; x < xAmount; x++)
+        for(int i = 0; i < createdTileLocations.Count; i++)
         {
-            for (int z = 0; z < zAmount; z++)
-            {
-                if (!createdTileLocations.Contains(new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize))))
-                {
-                    Instantiate(walls[Random.Range(0, walls.Length)], new Vector3((minX - (extraWallX * tileSize / 2) + (x * tileSize)), 0, (minZ - (extraWallZ * tileSize) / 2) + (z * tileSize)), transform.rotation);
-                    yield return new WaitForSeconds(waitTime);
-                }
-            }
+            //Right Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(tileSize, 0, 0)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(tileSize, 0, 0)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(tileSize, 0, 0));
+
+            //Left Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(-tileSize, 0, 0)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(-tileSize, 0, 0)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(-tileSize, 0, 0));
+
+
+            //Forward Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(0, 0, tileSize)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(0, 0, tileSize)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(0, 0, tileSize));
+
+            //Backward Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(0, 0, -tileSize)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(0, 0, -tileSize)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(0, 0, -tileSize));
+
+            //Forward Right Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(tileSize, 0, tileSize)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(tileSize, 0, tileSize)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(tileSize, 0, tileSize));
+
+            //Forward Left Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(-tileSize, 0, tileSize)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(-tileSize, 0, tileSize)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(-tileSize, 0, tileSize));
+
+
+            //Backward Right Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(tileSize, 0, -tileSize)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(tileSize, 0, -tileSize)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(tileSize, 0, -tileSize));
+
+            //Backward Left Side
+            if (!createdTileLocations.Contains(createdTileLocations[i] + new Vector3(-tileSize, 0, -tileSize)))
+                if (!wallLocations.Contains(createdTileLocations[i] + new Vector3(-tileSize, 0, -tileSize)))
+                    wallLocations.Add(createdTileLocations[i] + new Vector3(-tileSize, 0, -tileSize));
+        }
+
+        for(int j = 0; j < wallLocations.Count; j++)
+        {
+            Instantiate(walls[Random.Range(0, walls.Length)], wallLocations[j], Quaternion.identity);
+            yield return new WaitForSeconds(waitTime);
         }
 
         OnWallsCompleted(new List<GameObject>());
