@@ -51,14 +51,13 @@ public class Attack : MonoBehaviour
                     movement.chargeSpeed = chargeSpeed;
                     StartCoroutine(ResetSpeed());
                 }
-            }
 
-            if (!attacking)
-            {
-                attacking = true;
-                StartCoroutine(WeaponAttack());
+                if (!attacking)
+                {
+                    attacking = true;
+                    StartCoroutine(WeaponAttack());
+                }
             }
-             
         }
 
         if (Input.GetMouseButton(1) && !casting)
