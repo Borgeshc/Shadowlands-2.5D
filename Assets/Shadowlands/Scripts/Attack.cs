@@ -6,6 +6,7 @@ public class Attack : MonoBehaviour
 {
     [Header("Attack Variables")]
     public float attackDistance;
+    public float chargeDistance;
     public float chargeSpeed;
     public float damage;
 
@@ -20,8 +21,8 @@ public class Attack : MonoBehaviour
 
     public List<GameObject> enemiesInRange = new List<GameObject>();
 
-    bool attacking;
-    bool casting;
+   // bool attacking;
+    bool globalCooldown;
     bool slamming;
     bool charging;
 
@@ -30,6 +31,7 @@ public class Attack : MonoBehaviour
     Animator anim;
     Damage damageScript;
     Vector3 gravity;
+    Rigidbody rb;
 
     private void Start()
     {
@@ -37,32 +39,37 @@ public class Attack : MonoBehaviour
         damageScript = GetComponentInChildren<Damage>();
         cameraShake = GetComponent<RFX4_CameraShake>();
         movement = GetComponent<Movement>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         if(Input.GetMouseButton(0))
         {
-            if (TargetObject.target && Vector3.Distance(transform.position, TargetObject.target.transform.position + (Vector3.one * 2)) < attackDistance)
+            if (TargetObject.target)
             {
-                if (!charging)
+                float distance = Vector3.Distance(transform.position, TargetObject.target.transform.position + (Vector3.one * 2f));
+                if (distance >= attackDistance && distance <= chargeDistance && !charging)
                 {
                     charging = true;
                     movement.chargeSpeed = chargeSpeed;
                     StartCoroutine(ResetSpeed());
                 }
-
-                if (!attacking)
+                else
                 {
-                    attacking = true;
-                    StartCoroutine(WeaponAttack());
+                    if (!globalCooldown)
+                    {
+                        globalCooldown = true;
+                        StartCoroutine(WeaponAttack());
+                    }
+
                 }
             }
         }
 
-        if (Input.GetMouseButton(1) && !casting)
+        if (Input.GetMouseButton(1) && !globalCooldown)
         {
-            casting = true;
+            globalCooldown = true;
             StartCoroutine(SpellAttack());
         }
     }
@@ -71,6 +78,7 @@ public class Attack : MonoBehaviour
     IEnumerator ResetSpeed()
     {
         yield return new WaitForSeconds(.05f);
+        rb.velocity = (Vector3.zero);
         movement.chargeSpeed = 0;
         charging = false;
     }
@@ -118,34 +126,33 @@ public class Attack : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         //Movement.canRotate = true;
-       // Movement.canMove = true;
-        attacking = false;
+        // Movement.canMove = true;
+        globalCooldown = false;
     }
 
     IEnumerator SpellAttack()
     {
-       // Movement.canRotate = false;
-       // Movement.canMove = false;
-        int randomSpell = Random.Range(0, 2);
+        // Movement.canRotate = false;
+        // Movement.canMove = false;
+        //int randomSpell = Random.Range(0, 2);
 
-        switch (randomSpell)
-        {
-            case 0:
-                anim.SetTrigger("Spell1");
-                break;
-            case 1:
-                anim.SetTrigger("Spell2");
-                break;
-            case 2:
-                anim.SetTrigger("Spell3");
-                break;
-        }
+        //switch (randomSpell)
+        //{
+        //    case 0:
+        //        anim.SetTrigger("Spell1");
+        //        break;
+        //    case 1:
+        //        anim.SetTrigger("Spell2");
+        //        break;
+        //    case 2:
+        //        anim.SetTrigger("Spell3");
+        //        break;
+        //}
 
-        yield return new WaitForSeconds(.5f);
-      //  Movement.canMove = true;
-        yield return new WaitForSeconds(.5f);
-        //Movement.canRotate = true;
-        casting = false;
+        anim.SetTrigger("Attack8");
+
+        yield return new WaitForSeconds(1f);
+        globalCooldown = false;
     }
 
     public void CastFireball()

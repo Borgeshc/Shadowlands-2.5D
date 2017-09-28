@@ -8,6 +8,7 @@ public class EnemyAI : MonoBehaviour
     public float damage;
     public float attackFrequencyMin;
     public float attackFrequencyMax;
+    public float lookRadius;
 
     bool attacking;
 
@@ -27,15 +28,18 @@ public class EnemyAI : MonoBehaviour
 	
 	void FixedUpdate ()
     {
-        if (health.isDead) return;
-        transform.LookAt(new Vector3(target.transform.position.x, 0, 0));
+        if (health.isDead || !target) return;
 
-        if(target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+
+        if (distance <= lookRadius)
         {
-            agent.SetDestination(new Vector3(target.transform.position.x, 0, target.transform.position.z));
+            FaceTarget();
 
-            if (Vector3.Distance(transform.position, target.transform.position) > agent.stoppingDistance)
+            if (distance > agent.stoppingDistance)
+            {
                 FollowTarget();
+            }
             else
             {
                 anim.SetBool("IsIdle", true);
@@ -47,6 +51,13 @@ public class EnemyAI : MonoBehaviour
             }
         }
 	}
+
+    void FaceTarget()
+    {
+        Vector3 direction = (target.transform.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
+    }
 
     IEnumerator Attack()
     {
@@ -73,8 +84,15 @@ public class EnemyAI : MonoBehaviour
     void FollowTarget()
     {
         anim.SetBool("IsIdle", false);
+        agent.SetDestination(new Vector3(target.transform.position.x, 0, target.transform.position.z));
 
-        if(attack != null)
+        if (attack != null)
             StopCoroutine(attack);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, lookRadius);
     }
 }

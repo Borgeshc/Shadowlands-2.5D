@@ -12,7 +12,8 @@ public class Movement : MonoBehaviour
     private Transform myTransform;              // this transform
     private Vector3 destinationPosition;        // The destination Point
     private float destinationDistance;          // The distance between myTransform and destinationPosition
-    CharacterController cc;
+   // CharacterController cc;
+    Rigidbody rb;
     RaycastHit hit;
     Animator anim;
 
@@ -30,7 +31,7 @@ public class Movement : MonoBehaviour
         myTransform = transform;                            
         destinationPosition = myTransform.position;         
         canMove = true;
-        cc = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         moveSpeed = speed;
     }
@@ -40,7 +41,8 @@ public class Movement : MonoBehaviour
         destinationDistance = Vector3.Distance(destinationPosition, myTransform.position);
 
         if (destinationDistance < .5f || Input.GetKey(KeyCode.LeftShift))
-        {      
+        {
+            rb.velocity = Vector3.zero;
             moveSpeed = 0;
         }
         else if (destinationDistance > .5f)
@@ -101,10 +103,10 @@ public class Movement : MonoBehaviour
             }
         }
 
-        if(destinationDistance > 1.5f)
+        if(destinationDistance > 2f)
         {
             anim.SetBool("IsIdle", false);
-            cc.SimpleMove(transform.forward * moveSpeed * Time.deltaTime);
+            rb.velocity = (transform.forward * moveSpeed * Time.deltaTime);
         }
         else
             anim.SetBool("IsIdle", true);
