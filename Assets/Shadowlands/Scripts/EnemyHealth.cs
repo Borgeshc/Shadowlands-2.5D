@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
     public float maxHealth;
     public GameObject hitEffect;
+
+    public Image healthBar;
+    public Text regularCombatText;
+    public Text criticalCombatText;
 
     [HideInInspector]
     public bool isDead;
@@ -24,6 +29,7 @@ public class EnemyHealth : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         collision = GetComponent<CapsuleCollider>();
         boxCollision = GetComponent<BoxCollider>();
+        UpdateHealthBar();
     }
 
     public void TookDamage(float damage)
@@ -33,12 +39,33 @@ public class EnemyHealth : MonoBehaviour
         if(!takingDamage)
         {
             takingDamage = true;
-            health -= damage;
             StartCoroutine(TriggerHit());
+
+            if (CritChance())
+            {
+                StartCoroutine(FloatingCombatText((damage * 2), criticalCombatText));
+                health -= (int)damage * 2;
+            }
+            else
+            {
+                StartCoroutine(FloatingCombatText(damage, regularCombatText));
+                health -= (int)damage;
+            }
         }
+
+        UpdateHealthBar();
 
         if (health <= 0)
             Died();
+    }
+
+    bool CritChance()
+    {
+        int critRoll = Random.Range(0, 100);
+        if (critRoll <= PlayerStats.critChance)
+            return true;
+        else
+            return false;
     }
 
     IEnumerator TriggerHit()
@@ -61,6 +88,22 @@ public class EnemyHealth : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         hitEffect.SetActive(false);
         takingDamage = false;
+    }
+
+    IEnumerator FloatingCombatText(float damagedAmt, Text combatText)
+    {
+        yield return new WaitForSeconds(.2f);
+        combatText.gameObject.SetActive(true);
+        combatText.text = ((int)damagedAmt).ToString();
+
+        yield return new WaitForSeconds(.2f);
+        criticalCombatText.gameObject.SetActive(false);
+        regularCombatText.gameObject.SetActive(false);
+    }
+
+    void UpdateHealthBar()
+    {
+        healthBar.fillAmount = health / maxHealth;
     }
 
     void Died()

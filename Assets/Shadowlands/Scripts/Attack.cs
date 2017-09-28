@@ -8,7 +8,8 @@ public class Attack : MonoBehaviour
     public float attackDistance;
     public float chargeDistance;
     public float chargeSpeed;
-    public float damage;
+    public float minDamage;
+    public float maxDamage;
 
     [Space, Header("Effects")]
     public TrailRenderer weaponTrail;
@@ -188,7 +189,7 @@ public class Attack : MonoBehaviour
                 EnemyHealth health = enemiesInRange[i].GetComponent<EnemyHealth>();
                 if (!health.isDead)
                 {
-                    health.TookDamage(damage);
+                    health.TookDamage(Random.Range(minDamage, maxDamage));
                 }
                 else
                     enemiesInRange.Remove(enemiesInRange[i]);

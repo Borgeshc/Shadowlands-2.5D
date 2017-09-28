@@ -183,6 +183,7 @@ public class LevelGenerator : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
         }
 
-        OnWallsCompleted(new List<GameObject>());
+        List<GameObject> empty = new List<GameObject>();
+       // OnWallsCompleted(empty);
     }
 }
